@@ -7,7 +7,7 @@ var request = require('request');
 var ip = require('docker-ip');
 
 var pg = require('pg');
-var connString = `postgres://docker:docker@${ip()}/docker`;
+var connString = `postgres://docker:docker@${ip()}:5050/docker`;
 
 describe('Postgres Tests', function() {
   var server = http.createServer((request, response) => {

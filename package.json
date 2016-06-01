@@ -4,7 +4,7 @@
   "description": "A postgres miniprofiler provider for timing analysis",
   "main": "index.js",
   "scripts": {
-    "start-services": "docker run -d -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -p 5432:5432 postgres",
+    "start-services": "docker run -d -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -p 5050:5432 postgres",
     "lint": "eslint .",
     "test": "mocha tests/ -c",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- tests/ -R spec",
