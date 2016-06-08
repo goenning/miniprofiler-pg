@@ -1,7 +1,7 @@
 {
   "name": "miniprofiler-pg",
   "version": "0.0.1",
-  "description": "A postgres miniprofiler provider for timing analysis",
+  "description": "A postgres provider for miniprofiler timing analysis",
   "main": "index.js",
   "scripts": {
     "start-services": "docker run -d -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -p 5050:5432 postgres",
