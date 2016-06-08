@@ -1,51 +1,13 @@
 'use strict';
 
 var expect = require('chai').expect;
-var miniprofiler = require('miniprofiler');
-var http = require('http');
 var request = require('request');
-var ip = require('docker-ip');
-
-var pg = require('pg');
-var connString = `postgres://docker:docker@${ip()}:5050/docker`;
+var server = require('./server.js');
 
 describe('Postgres Tests', function() {
-  var server = http.createServer((request, response) => {
-    miniprofiler.express((req, res) => { return !req.url.startsWith('/unprofiled'); })(request, response, () => {
-      require('../index.js')(pg).handler(request, response, () => {
-
-        if (request.url == '/pg-select') {
-          pg.connect(connString, function(err, client, done) {
-            client.query('SELECT $1::int AS number', ['1'], function(err, result) {
-              response.end('');
-            });
-          });
-        }
-
-        if (request.url == '/pg-select-event') {
-          pg.connect(connString, function(err, client, done) {
-            var query = client.query('SELECT $1::int AS number', ['1']);
-            query.on('end', function() {
-              response.end('');
-            });
-          });
-        }
-
-        if (request.url == '/unprofiled') {
-          pg.connect(connString, function(err, client, done) {
-            client.query('SELECT $1::int AS number', ['123456'], function(err, result) {
-              response.end(result.rows[0].number.toString());
-            });
-          });
-        }
-
-      });
-    });
-  });
 
   before((done) => { server.listen(8080, done); });
   after((done) => { server.close(done); });
-
 
   for (let url of ['/pg-select', '/pg-select-event']) {
 
