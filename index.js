@@ -1,6 +1,6 @@
 'use strict';
 
-var pgQuery;
+let pgQuery;
 
 module.exports = function(pg) {
   pgQuery = pgQuery || pg.Client.prototype.query;
@@ -13,8 +13,8 @@ module.exports = function(pg) {
         if (callback) {
           req.miniprofiler.timeQuery('sql', config.toString(), pgQuery.bind(this), config, values, callback);
         } else {
-          var timing = req.miniprofiler.startTimeQuery('sql', config.toString());
-          var query = pgQuery.call(this, config, values, callback);
+          const timing = req.miniprofiler.startTimeQuery('sql', config.toString());
+          const query = pgQuery.call(this, config, values, callback);
           query.on('end', function() {
             req.miniprofiler.stopTimeQuery(timing);
           });

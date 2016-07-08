@@ -6,7 +6,10 @@
     "mocha": true
   },
   "rules": {
-    "semi": [2, "always"],
+    "semi": ["error", "always"],
+    "no-console": 0,
+    "no-var": "error",
+    "prefer-const": "error",
     "strict": ["error", "global"],
     "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
     "quotes": ["error", "single", { "avoidEscape": true } ],
