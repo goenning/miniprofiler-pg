@@ -15,8 +15,9 @@ module.exports = function(pg) {
         } else {
           const timing = req.miniprofiler.startTimeQuery('sql', config.toString());
           const query = pgQuery.call(this, config, values, callback);
-          query.on('end', function() {
+          query.then(function(r) {
             req.miniprofiler.stopTimeQuery(timing);
+            return r;
           });
           return query;
         }
