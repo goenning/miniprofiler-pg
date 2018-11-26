@@ -12,14 +12,16 @@ module.exports = function(pg) {
       pg.Client.prototype.query = !req.miniprofiler || !req.miniprofiler.enabled ? pgQuery : function(config, values, callback) {
         if (callback) {
           req.miniprofiler.timeQuery('sql', config.toString(), pgQuery.bind(this), config, values, callback);
-        } else {
-          const timing = req.miniprofiler.startTimeQuery('sql', config.toString());
-          const query = pgQuery.call(this, config, values, callback);
-          query.on('end', function() {
-            req.miniprofiler.stopTimeQuery(timing);
-          });
-          return query;
+          return;
         }
+
+        const timing = req.miniprofiler.startTimeQuery('sql', config.toString());
+        const query = pgQuery.call(this, config, values, callback);
+
+        return query.then(result => {
+          req.miniprofiler.stopTimeQuery(timing);
+          return result;
+        });
       };
 
       next();

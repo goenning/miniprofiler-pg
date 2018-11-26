@@ -6,12 +6,12 @@ const server = require('./server.js');
 
 describe('Postgres Tests', function() {
 
-  before((done) => { server.listen(8080, done); });
-  after((done) => { server.close(done); });
+  before(done => { server.listen(8080, done); });
+  after(done => { server.close(done); });
 
-  for (const url of ['/pg-select', '/pg-select-event']) {
+  for (const url of ['/pg-select', '/pg-select-promise']) {
 
-    it(`Should profile postgres SELECT command for url '${url}'`, function(done) {
+    it(`Should profile postgres SELECT command for url '${url}'`, done => {
       request(`http://localhost:8080${url}`, (err, response) => {
         const ids = JSON.parse(response.headers['x-miniprofiler-ids']);
 
@@ -31,7 +31,7 @@ describe('Postgres Tests', function() {
 
   }
 
-  it('Should profile postgres NonQuery commands', function(done) {
+  it('Should profile postgres NonQuery commands', done => {
     request('http://localhost:8080/insert', (err, response) => {
       const ids = JSON.parse(response.headers['x-miniprofiler-ids']);
 
@@ -49,7 +49,7 @@ describe('Postgres Tests', function() {
     });
   });
 
-  it('should not break pg usage on unprofiled routes', function(done) {
+  it('should not break pg usage on unprofiled routes', done => {
     request('http://localhost:8080/unprofiled', (err, response, body) => {
       expect(response.headers).to.not.include.keys('x-miniprofiler-ids');
       expect(body).to.be.equal('123456');
