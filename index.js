@@ -8,8 +8,10 @@ module.exports = function(pg) {
   return {
     name: 'pg',
     handler: function(req, res, next) {
+      pg.Client.prototype.query = function(config, values, callback) {
+        if (!req.miniprofiler || !req.miniprofiler.enabled)
+          return pgQuery.apply(this, arguments);
 
-      pg.Client.prototype.query = !req.miniprofiler || !req.miniprofiler.enabled ? pgQuery : function(config, values, callback) {
         if (callback) {
           req.miniprofiler.timeQuery('sql', config.toString(), pgQuery.bind(this), config, values, callback);
           return;
