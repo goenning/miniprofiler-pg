@@ -23,6 +23,9 @@ module.exports = function(pg) {
         return query.then(result => {
           req.miniprofiler.stopTimeQuery(timing);
           return result;
+        }).catch(err => {
+          req.miniprofiler.stopTimeQuery(timing);
+          throw err;
         });
       };
 

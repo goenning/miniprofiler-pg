@@ -43,6 +43,9 @@ const server = http.createServer((request, response) => {
           .then(result => response.end(result.rows[0].number.toString()));
       }
 
+      if (request.url == '/error') {
+        client.query('SELECT -typo- AS number').catch(result => response.end('handled'));
+      }
     });
   });
 });

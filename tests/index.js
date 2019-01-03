@@ -28,7 +28,6 @@ describe('Postgres Tests', function() {
         });
       });
     });
-
   }
 
   it('Should profile postgres NonQuery commands', done => {
@@ -49,7 +48,7 @@ describe('Postgres Tests', function() {
     });
   });
 
-  it('should not break pg usage on unprofiled routes', done => {
+  it('Should not break pg usage on unprofiled routes', done => {
     request('http://localhost:8080/unprofiled', (err, response, body) => {
       expect(response.headers).to.not.include.keys('x-miniprofiler-ids');
       expect(body).to.be.equal('123456');
@@ -57,4 +56,11 @@ describe('Postgres Tests', function() {
     });
   });
 
+  it('Should profile SQL with errors', done => {
+    request('http://localhost:8080/error', (err, response, body) => {
+      expect(response.headers).to.include.keys('x-miniprofiler-ids');
+      expect(body).to.be.equal('handled');
+      done();
+    });
+  });
 });
